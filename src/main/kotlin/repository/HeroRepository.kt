@@ -4,7 +4,7 @@ import org.movieverse.modules.ApiResponse
 import org.movieverse.modules.Hero
 
 interface HeroRepository {
-    val heroes: Map<Int, List<Hero>>
+    val heroes: Map<Int, List<Hero>>     //key is page and value is list of hero in that page
 
     val page1: List<Hero>
     val page2: List<Hero>
