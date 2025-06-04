@@ -2,6 +2,7 @@ package org.movieverse.repository
 
 import org.movieverse.modules.ApiResponse
 import org.movieverse.modules.Hero
+import javax.management.Query
 
 const val PREVIOUS_PAGE = "prevPage"
 const val NEXT_PAGE = "nextPage"
@@ -407,6 +408,7 @@ class HeroRepositoryImpl : HeroRepository {
         )
     }
 
+
     private fun calculatePage(page: Int): Map<String, Int?> {
         var prevPage : Int? = page
         var nextPage : Int? = page
@@ -426,8 +428,28 @@ class HeroRepositoryImpl : HeroRepository {
         return mapOf(PREVIOUS_PAGE to prevPage, NEXT_PAGE to nextPage)
     }
 
-    override suspend fun searchHeroes(name: String): ApiResponse {
-        TODO("Not yet implemented")
+    override suspend fun searchHeroes(name: String?): ApiResponse {
+        return ApiResponse(
+            success = true,
+            message = "ok",
+            heroes = findHeroes(query = name)
+        )
+    }
+
+    private fun findHeroes(query: String?) : List<Hero> {
+        val found = mutableListOf<Hero>()
+        return if(!query.isNullOrEmpty()){
+            heroes.forEach { (_,heroes) ->
+                heroes.forEach { hero ->
+                    if(hero.name.lowercase().contains(query.lowercase())){
+                        found.add(hero)
+                    }
+                }
+            }
+            found
+        }else{
+            emptyList()
+        }
     }
 
 }
